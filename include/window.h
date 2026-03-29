@@ -7,14 +7,14 @@ struct GLFWwindow;
  * @brief Camera struct for managing view transformations.
  */
 struct Camera {
-    float rotationX = 0.0f;  // Rotation around X axis (up/down)
-    float rotationY = 0.0f;  // Rotation around Y axis (left/right)
-    float zoom = -4.0f;      // Distance from center (negative = camera back)
+    float rotation_x = 0.0f;  
+    float rotation_y = 0.0f;  
+    float zoom       = -4.0f;     
     
     // Mouse tracking
-    double lastMouseX = 0.0;
-    double lastMouseY = 0.0;
-    bool firstMouse = true;
+    double last_mouse_x = 0.0;
+    double last_mouse_y = 0.0;
+    bool is_first_mouse = true;
 };
 
 /**

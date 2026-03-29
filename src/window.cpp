@@ -10,36 +10,36 @@
 
 Camera camera;
 
-void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
-    if (camera.firstMouse) {
-        camera.lastMouseX = xpos;
-        camera.lastMouseY = ypos;
-        camera.firstMouse = false;
+void mouse_callback(GLFWwindow* window, double mouse_x, double mouse_y) {
+    if (camera.is_first_mouse) {
+        camera.last_mouse_x   = mouse_x;
+        camera.last_mouse_y   = mouse_y;
+        camera.is_first_mouse = false;
         return;
     }
 
-    double xoffset = xpos - camera.lastMouseX;
-    double yoffset = camera.lastMouseY - ypos; 
+    double mouse_x_offset = mouse_x - camera.last_mouse_x;
+    double mouse_y_offset = camera.last_mouse_y - mouse_y; 
 
-    camera.lastMouseX = xpos;
-    camera.lastMouseY = ypos;
+    camera.last_mouse_x = mouse_x;
+    camera.last_mouse_y = mouse_y;
 
-    float sensitivity = 0.3f;
-    xoffset *= sensitivity;
-    yoffset *= sensitivity;
+    float mouse_sensitivity = 0.3f;
+    mouse_x_offset *= mouse_sensitivity;
+    mouse_y_offset *= mouse_sensitivity;
 
-    camera.rotationY += static_cast<float>(xoffset);
-    camera.rotationX += static_cast<float>(yoffset);
+    camera.rotation_y += static_cast<float>(mouse_x_offset);
+    camera.rotation_x += static_cast<float>(mouse_y_offset);
 
-    if (camera.rotationX > 89.0f)
-        camera.rotationX = 89.0f;
-    if (camera.rotationX < -89.0f)
-        camera.rotationX = -89.0f;
+    if (camera.rotation_x > 89.0f)
+        camera.rotation_x = 89.0f;
+    if (camera.rotation_x < -89.0f)
+        camera.rotation_x = -89.0f;
 }
 
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
-    float zoomSpeed = 0.2f;
-    camera.zoom -= static_cast<float>(yoffset) * zoomSpeed;
+    float zoom_speed = 0.2f;
+    camera.zoom -= static_cast<float>(yoffset) * zoom_speed;
     
     if (camera.zoom > -0.5f)
         camera.zoom = -0.5f;
@@ -53,15 +53,15 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    float aspect = static_cast<float>(width) / static_cast<float>(height ? height : 1);
-    float fov = 45.0f;
-    float f = 1.0f / tanf(fov * static_cast<float>(M_PI) / 360.0f);
-    float nearPlane = 0.1f;
-    float farPlane = 100.0f;
+    float aspect_ratio  = static_cast<float>(width) / static_cast<float>(height ? height : 1);
+    float field_of_view = 45.0f;
+    float f             = 1.0f / tanf(field_of_view * static_cast<float>(M_PI) / 360.0f);
+    float near_plane    = 0.1f;
+    float far_plane     = 100.0f;
 
-    glFrustum(-aspect * nearPlane / f, aspect * nearPlane / f,
-              -nearPlane / f, nearPlane / f,
-              nearPlane, farPlane);
+    glFrustum(-aspect_ratio * near_plane / f, aspect_ratio * near_plane / f,
+              -near_plane / f, near_plane / f,
+              near_plane, far_plane);
 
     glMatrixMode(GL_MODELVIEW);
 }
@@ -104,16 +104,16 @@ GLFWwindow* createWindow(int width, int height, const char* title) {
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
-    float light_pos[] = {1.0f, 1.0f, 1.0f, 0.0f};
-    glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+    float light_position[] = {1.0f, 1.0f, 1.0f, 0.0f};
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 
-    float light_ambient[]  = {0.4f, 0.4f, 0.4f, 1.0f};
-    float light_diffuse[]  = {1.0f, 1.0f, 1.0f, 1.0f};
-    float light_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    float ambient_light[]  = {0.4f, 0.4f, 0.4f, 1.0f};
+    float diffuse_light[]  = {1.0f, 1.0f, 1.0f, 1.0f};
+    float specular_light[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
-    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient_light);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse_light);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specular_light);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -138,8 +138,8 @@ void clearWindow() {
     
     // Apply camera transformations
     glTranslatef(0.0f, 0.0f, camera.zoom);
-    glRotatef(camera.rotationX, 1.0f, 0.0f, 0.0f);
-    glRotatef(camera.rotationY, 0.0f, 1.0f, 0.0f);
+    glRotatef(camera.rotation_x, 1.0f, 0.0f, 0.0f);
+    glRotatef(camera.rotation_y, 0.0f, 1.0f, 0.0f);
 }
 
 void updateWindow(GLFWwindow* window) {

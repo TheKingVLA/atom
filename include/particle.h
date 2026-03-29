@@ -13,28 +13,28 @@ struct Vec3 {
 };
 
 struct Particle {
-    Vec3   sphericalPosition;   // (r, theta, phi)
-    Vec3   color;
-    float  radius;
+    Vec3 spherical_coordinates;   // (r, theta, phi)
+    Vec3 color;
+    float radius;
 
     /**
      * @brief Constructs a Particle with the specified spherical position, color, and radius.
-     * @param pos The spherical position (r, theta, phi).
-     * @param c The RGB color of the particle, with each component in the range [0.0, 1.0].
-     * @param r The radius of the particle.
+     * @param position The spherical position (r, theta, phi).
+     * @param color_param The RGB color of the particle, with each component in the range [0.0, 1.0].
+     * @param radius_param The radius of the particle.
      */
-    Particle(Vec3 pos, Vec3 c, float r)
-        : sphericalPosition(pos), color(c), radius(r) {}
+    Particle(Vec3 position, Vec3 color_param, float radius_param)
+        : spherical_coordinates(position), color(color_param), radius(radius_param) {}
 
     /**
      * @brief Converts spherical coordinates to Cartesian coordinates.
-     * @param s The spherical coordinates (r, theta, phi).
+     * @param spherical_coords The spherical coordinates (r, theta, phi).
      * @return The Cartesian coordinates (x, y, z).
      */
-    static Vec3 sphericalToCartesian(const Vec3& s) {
-        float r = s.x;
-        float theta = s.y;
-        float phi = s.z;
+    static Vec3 sphericalToCartesian(const Vec3& spherical_coords) {
+        float r     = spherical_coords.x;
+        float theta = spherical_coords.y;
+        float phi   = spherical_coords.z;
 
         return {
             r * std::sin(theta) * std::cos(phi),
@@ -45,45 +45,45 @@ struct Particle {
 
     /**
      * @brief Draws the particle as a sphere using OpenGL.
-     * @param segments The number of segments to use for the sphere (default is 32).
-     * The semgment varialbe defines the stacks and slices of the sphere.
+     * @param sphere_segments The number of segments to use for the sphere (default is 32).
+     * The sphere_segments variable defines the stacks and slices of the sphere.
      */
-    void draw(int segments = 32) const {
+    void draw(int sphere_segments = 32) const {
         glColor3f(color.x, color.y, color.z);
         glPushMatrix();
 
-        Vec3 pos = sphericalToCartesian(sphericalPosition);
-        glTranslatef(pos.x, pos.y, pos.z);
+        Vec3 cartesian_position = sphericalToCartesian(spherical_coordinates);
+        glTranslatef(cartesian_position.x, cartesian_position.y, cartesian_position.z);
 
-        int stacks = segments / 2;
-        int slices = segments;
+        int stacks = sphere_segments / 2;
+        int slices = sphere_segments;
 
-        for (int i = 0; i < stacks; ++i) {
-            float lat0 = M_PI * (-0.5f + static_cast<float>(i) / stacks);
-            float lat1 = M_PI * (-0.5f + static_cast<float>(i + 1) / stacks);
+        for (int stack_index = 0; stack_index < stacks; ++stack_index) {
+            float latitude_0 = M_PI * (-0.5f + static_cast<float>(stack_index) / stacks);
+            float latitude_1 = M_PI * (-0.5f + static_cast<float>(stack_index + 1) / stacks);
 
-            float sinLat0 = std::sin(lat0);
-            float cosLat0 = std::cos(lat0);
-            float sinLat1 = std::sin(lat1);
-            float cosLat1 = std::cos(lat1);
+            float sin_latitude_0 = std::sin(latitude_0);
+            float cos_latitude_0 = std::cos(latitude_0);
+            float sin_latitude_1 = std::sin(latitude_1);
+            float cos_latitude_1 = std::cos(latitude_1);
 
             glBegin(GL_TRIANGLE_STRIP);
-            for (int j = 0; j <= slices; ++j) {
-                float lng = 2.0f * M_PI * static_cast<float>(j) / slices;
-                float sinLng = std::sin(lng);
-                float cosLng = std::cos(lng);
+            for (int slice_index = 0; slice_index <= slices; ++slice_index) {
+                float longitude  = 2.0f * M_PI * static_cast<float>(slice_index) / slices;
+                float sin_longitude = std::sin(longitude);
+                float cos_longitude = std::cos(longitude);
 
-                float x0 = cosLat0 * cosLng;
-                float y0 = sinLat0;
-                float z0 = cosLat0 * sinLng;
-                glNormal3f(x0, y0, z0);
-                glVertex3f(x0 * radius, y0 * radius, z0 * radius);
+                float vertex_x_0 = cos_latitude_0 * cos_longitude;
+                float vertex_y_0 = sin_latitude_0;
+                float vertex_z_0 = cos_latitude_0 * sin_longitude;
+                glNormal3f(vertex_x_0, vertex_y_0, vertex_z_0);
+                glVertex3f(vertex_x_0 * radius, vertex_y_0 * radius, vertex_z_0 * radius);
 
-                float x1 = cosLat1 * cosLng;
-                float y1 = sinLat1;
-                float z1 = cosLat1 * sinLng;
-                glNormal3f(x1, y1, z1);
-                glVertex3f(x1 * radius, y1 * radius, z1 * radius);
+                float vertex_x_1 = cos_latitude_1 * cos_longitude;
+                float vertex_y_1 = sin_latitude_1;
+                float vertex_z_1 = cos_latitude_1 * sin_longitude;
+                glNormal3f(vertex_x_1, vertex_y_1, vertex_z_1);
+                glVertex3f(vertex_x_1 * radius, vertex_y_1 * radius, vertex_z_1 * radius);
             }
             glEnd();
         }

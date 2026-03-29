@@ -8,30 +8,30 @@
 
 // ======================================================================================
 // Here we define the quantum numbers and parameters for the orbital we want to visualize
-int n = 3;
-int l = 1; 
-int m = 0;
-int numSamples = 60000;
-float a0 = 0.35f;
+int principal_quantum_number = 3;
+int azimuthal_quantum_number = 1; 
+int magnetic_quantum_number = 0;
+int number_of_samples = 60000;
+float bohr_radius = 0.35f;
 // ======================================================================================
 
-int width  = 800;
-int height = 800;
-const char* title = "An atom";
+int window_width  = 800;
+int window_height = 800;
+const char* window_title = "An atom";
 
 Vec3 proton_color = {1.0f, 0.1f, 0.1f};
-Vec3 cloud_color = {0.2f, 0.5f, 1.0f};
+Vec3 electron_cloud_color = {0.2f, 0.5f, 1.0f};
 
 int main() {
-    GLFWwindow* window = createWindow(width, height, title);
+    GLFWwindow* window = createWindow(window_width, window_height, window_title);
     if (!window) {
         return -1;
     }
 
     Particle proton({0.0f, 0.0f, 0.0f}, proton_color, 0.08f);
-    OrbitalCloud cloud(cloud_color);
+    OrbitalCloud electron_cloud(electron_cloud_color);
 
-    cloud.generateHydrogenState(n, l, m, numSamples, a0);
+    electron_cloud.generateHydrogenState(principal_quantum_number, azimuthal_quantum_number, magnetic_quantum_number, number_of_samples, bohr_radius);
 
     while (!glfwWindowShouldClose(window)) {
         clearWindow();
@@ -39,7 +39,7 @@ int main() {
         glPushMatrix();
 
         proton.draw(32);
-        cloud.draw(2.0f);
+        electron_cloud.draw(2.0f);
 
         glPopMatrix();
 

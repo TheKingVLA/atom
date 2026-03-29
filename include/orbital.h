@@ -26,13 +26,13 @@ public:
 
     /**
      * @brief Draws the orbital cloud using OpenGL.
-     * @param pointSize The size of each particle point (default is 2.0f).
+     * @param point_size The size of each particle point (default is 2.0f).
      */
-    void draw(float pointSize = 2.0f) const;
+    void draw(float point_size = 2.0f) const;
 
 private:
-    std::vector<Vec3> points;
-    Vec3 color;
+    std::vector<Vec3> electron_positions;
+    Vec3 electron_color;
 };
 
 #endif
