@@ -13,6 +13,7 @@
                 "${workspaceFolder}/src/main.cpp",
                 "${workspaceFolder}/src/window.cpp",
                 "${workspaceFolder}/src/glad.c",
+                "${workspaceFolder}/src/orbital.cpp",
                 "-lglfw3dll",
                 "-mwindows",
                 "-o",

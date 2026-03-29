@@ -56,6 +56,7 @@ Divide everything by $RY$:
 $$-\frac{\hbar^2}{2m_e}[\frac{1}{R} \frac{1}{r^2} \frac{d}{dr}(r^2 \frac{dR}{dr})+\frac{1}{r^2} \frac{1}{Y} (\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}(\sin \theta \frac{\partial Y}{\partial \theta})+\frac{1}{\sin^2 \theta}\frac{\partial^2 Y}{\partial \phi^2})]+V(r)=E$$
 
 Multiply by $-2m_e r^2 / \hbar^2$:
+
 $$\frac{1}{R}\frac{d}{dr}(r^2 \frac{dR}{dr})+ \frac{1}{Y} (\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}(\sin \theta \frac{\partial Y}{\partial \theta})+\frac{1}{\sin^2 \theta}\frac{\partial^2 Y}{\partial \phi^2})+\frac{2m_e r^2}{\hbar^2}(E-V(r))=0$$
 
 Now we can separate radial and angular parts:
@@ -73,6 +74,7 @@ $$\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}(\sin \theta \frac{\part
 This is an equation whose solutions are spherical harmonics $Y_l^m (\theta,\phi)$
 
 Radial equation:
+
 $$\frac{d}{dr}(r^2 \frac{dR}{dr})+[\frac{2m_e r^2}{\hbar^2}(E-V(r))-l(l+1)]R=0$$
 
 We are going to use the hydrogen atom, where the potential $V(r)$ is the Coulomb potential,
@@ -152,6 +154,7 @@ $$\Phi(\phi)=Ae^{im\phi}+Be^{-im\phi}$$
 For the wavefunction to be single-valued, we need
 
 $$\Phi(\phi +2\pi)=\Phi(\phi)$$
+
 which forces $m$ to be an integer.
 
 We choose the normalized solution
@@ -179,6 +182,7 @@ $$Y_l^m (\theta,\phi)=N_{lm}P^m_l (\cos \theta) e^{im\phi}$$
 where $N_{lm}$ is a normalization constant.
 
 The angular probability density is 
+
 $$|Y^m_l (\theta,\phi)|^2$$
 
 But in spherical coordinates, the solid-angle element is
@@ -206,6 +210,9 @@ So
 $$P(\theta) \propto \sin \theta (P^m_l(\cos \theta))^2$$
 
 Let's recap:
+
 $$R_{nl}(r)=\sqrt{(\frac{2}{na_0})^3\frac{(n-l-1)!}{2n (n+l)!}}e^{-\rho/2}\rho^l L_{n-l-1}^{2l+1}(\rho), \quad \rho=\frac{2r}{na_0}$$
+
 $$P(\phi)=\frac{1}{2\pi}$$
+
 $$P(\theta) \propto \sin \theta (P^m_l(\cos \theta))^2$$
