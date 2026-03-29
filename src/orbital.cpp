@@ -13,6 +13,11 @@
 
 namespace {
 
+/**
+ * @brief Nothing special, just factorial!
+ * @param n The number for which to compute the factorial.
+ * @return The factorial of n.
+ */
 double factorial(int n) {
     if (n < 0) return 0.0;
     double result = 1.0;
@@ -20,6 +25,13 @@ double factorial(int n) {
     return result;
 }
 
+/**
+ * @brief Computes the associated Laguerre polynomial L_k^alpha(x).
+ * @param k The degree of the polynomial.
+ * @param alpha The parameter for the associated polynomial.
+ * @param x The argument of the polynomial.
+ * @return The value of L_k^alpha(x).
+ */
 double assocLaguerre(int k, int alpha, double x) {
     // L_k^alpha(x)
     if (k == 0) return 1.0;
@@ -37,6 +49,13 @@ double assocLaguerre(int k, int alpha, double x) {
     return Lk;
 }
 
+/**
+ * @brief Computes the associated Legendre polynomial P_l^m(x) for m >= 0.
+ * @param l The degree of the polynomial.
+ * @param m The order of the polynomial (must be non-negative).
+ * @param x The argument of the polynomial (must be in the range [-1, 1]).
+ * @return The value of P_l^m(x).
+ */
 double assocLegendrePositiveM(int l, int m, double x) {
     // Computes P_l^m(x) for m >= 0
     if (m < 0 || m > l) return 0.0;
@@ -69,6 +88,14 @@ double assocLegendrePositiveM(int l, int m, double x) {
     return p_lm1;
 }
 
+/**
+ * @brief Computes the radial part of the hydrogen wavefunction R_nl(r).
+ * @param n The principal quantum number (n >= 1).
+ * @param l The azimuthal quantum number (0 <= l < n).
+ * @param r The radial distance from the nucleus (r >= 0).
+ * @param a0 The Bohr radius (a0 > 0).
+ * @return The value of R_nl(r).
+ */
 double hydrogenRadial(int n, int l, double r, double a0) {
     // R_nl(r)
     if (n < 1 || l < 0 || l >= n || r < 0.0 || a0 <= 0.0) return 0.0;
@@ -92,6 +119,13 @@ struct SampleTable {
     std::vector<float> cdf;
 };
 
+
+/**
+ * @brief Builds a cumulative distribution function from a probability density function.
+ * @param xGrid The grid of x-values.
+ * @param pdf The probability density function values at the grid points.
+ * @return The cumulative distribution function.
+ */
 SampleTable buildCDF(const std::vector<float>& grid, const std::vector<float>& pdf) {
     SampleTable table;
     table.x = grid;
@@ -111,6 +145,12 @@ SampleTable buildCDF(const std::vector<float>& grid, const std::vector<float>& p
     return table;
 }
 
+/**
+ * @brief Samples a value from a cumulative distribution function.
+ * @param table The cumulative distribution function table.
+ * @param rng The random number generator.
+ * @return The sampled value.
+ */
 float sampleFromCDF(const SampleTable& table, std::mt19937& rng) {
     std::uniform_real_distribution<float> U(0.0f, 1.0f);
     float u = U(rng);
@@ -127,6 +167,13 @@ float sampleFromCDF(const SampleTable& table, std::mt19937& rng) {
     return x0 + t * (x1 - x0);
 }
 
+/**
+ * @brief Builds the radial cumulative distribution function for a hydrogen-like atom.
+ * @param n The principal quantum number.
+ * @param l The azimuthal quantum number.
+ * @param a0 The Bohr radius.
+ * @return The radial CDF.
+ */
 SampleTable buildRadialCDF(int n, int l, float a0) {
     const int Nr = 5000;
     const float rMax = 12.0f * n * n * a0;
@@ -146,6 +193,12 @@ SampleTable buildRadialCDF(int n, int l, float a0) {
     return buildCDF(rGrid, pdf);
 }
 
+/**
+ * @brief Builds the theta cumulative distribution function for a hydrogen-like atom.
+ * @param l The azimuthal quantum number.
+ * @param m The magnetic quantum number.
+ * @return The theta CDF.
+ */
 SampleTable buildThetaCDF(int l, int m) {
     const int Ntheta = 3000;
     int mAbs = std::abs(m);
@@ -190,7 +243,7 @@ void OrbitalCloud::generateHydrogenState(int n, int l, int m, int numSamples, fl
     for (int i = 0; i < numSamples; ++i) {
         float r = sampleFromCDF(radialCDF, rng);
         float theta = sampleFromCDF(thetaCDF, rng);
-        float phi = 2.0f * static_cast<float>(M_PI) * U(rng);   // uniform in phi
+        float phi = 2.0f * static_cast<float>(M_PI) * U(rng);   // p_phi(phi) is uniform in [0, 2pi)
 
         Vec3 p {
             r * std::sin(theta) * std::cos(phi),

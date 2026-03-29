@@ -10,7 +10,7 @@
 // Here we define the quantum numbers and parameters for the orbital we want to visualize
 int n = 3;
 int l = 1; 
-int m = 1;
+int m = 0;
 int numSamples = 60000;
 float a0 = 0.35f;
 // ======================================================================================
