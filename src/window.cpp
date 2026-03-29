@@ -4,6 +4,10 @@
 #include <cmath>
 #include <iostream>
 
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 
@@ -12,7 +16,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
     float aspect = static_cast<float>(width) / static_cast<float>(height ? height : 1);
     float fov = 45.0f;
-    float f = 1.0f / tanf(fov * 3.14159265358979323846f / 360.0f);
+    float f = 1.0f / tanf(fov * static_cast<float>(M_PI) / 360.0f);
     float nearPlane = 0.1f;
     float farPlane = 100.0f;
 
@@ -44,6 +48,8 @@ GLFWwindow* createWindow(int width, int height, const char* title) {
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cerr << "Failed to initialize GLAD" << std::endl;
+        glfwDestroyWindow(window);
+        glfwTerminate();
         return nullptr;
     }
 
@@ -88,7 +94,7 @@ void clearWindow() {
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(0.0f, 0.0f, -3.0f);
+    glTranslatef(0.0f, 0.0f, -4.0f);
 }
 
 void updateWindow(GLFWwindow* window) {

@@ -2,7 +2,6 @@
 #define PARTICLE_H
 
 #include <cmath>
-#include <vector>
 #include <glad/glad.h>
 
 #ifndef M_PI
@@ -14,11 +13,24 @@ struct Vec3 {
 };
 
 struct Particle {
-    Vec3 spherical_posititon; // (r, theta, phi) 
-    Vec3 color;
-    float radius;
-    Particle(Vec3 pos, Vec3 c, float radius_particle) : spherical_posititon(pos), color(c), radius(radius_particle) {}
+    Vec3   sphericalPosition;   // (r, theta, phi)
+    Vec3   color;
+    float  radius;
 
+    /**
+     * @brief Constructs a Particle with the specified spherical position, color, and radius.
+     * @param pos The spherical position (r, theta, phi).
+     * @param c The RGB color of the particle, with each component in the range [0.0, 1.0].
+     * @param r The radius of the particle.
+     */
+    Particle(Vec3 pos, Vec3 c, float r)
+        : sphericalPosition(pos), color(c), radius(r) {}
+
+    /**
+     * @brief Converts spherical coordinates to Cartesian coordinates.
+     * @param s The spherical coordinates (r, theta, phi).
+     * @return The Cartesian coordinates (x, y, z).
+     */
     static Vec3 sphericalToCartesian(const Vec3& s) {
         float r = s.x;
         float theta = s.y;
@@ -31,12 +43,17 @@ struct Particle {
         };
     }
 
+    /**
+     * @brief Draws the particle as a sphere using OpenGL.
+     * @param segments The number of segments to use for the sphere (default is 32).
+     * The semgment varialbe defines the stacks and slices of the sphere.
+     */
     void draw(int segments = 32) const {
         glColor3f(color.x, color.y, color.z);
         glPushMatrix();
 
-        Vec3 p = sphericalToCartesian(spherical_posititon);
-        glTranslatef(p.x, p.y, p.z);
+        Vec3 pos = sphericalToCartesian(sphericalPosition);
+        glTranslatef(pos.x, pos.y, pos.z);
 
         int stacks = segments / 2;
         int slices = segments;

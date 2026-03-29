@@ -12,7 +12,7 @@ The position of a particle is described using spherical coordinates $(r, \theta,
 - Magnetic Quantum Number ($m$): Specifies the orientation of an orbital within a subshell, ranging from $-l$ to $+l$. It indicates the number of orbitals ($2l+1$) per subshell.
 - Spin Quantum Number ($m_s$): Represents the intrinsic spin of the electron, with values of $+\frac{1}{2}$ (up) or $-\frac{1}{2}$ (down). 
 
-We will ignore the spin, hence we use the quantum numbers $(n,l,m)$. Here comes a figure from [Wikipedia](https://en.wikipedia.org/wiki/Quantum_number), for cases $n=1,2,3$ (it is written in the form $n l_{m_l}$, where $l=s,p,d,f$).  
+We will ignore the spin, hence we use the quantum numbers $(n,l,m)$. Here comes a figure from [Wikipedia](https://en.wikipedia.org/wiki/Quantum_number), for cases $n=1,2,3$ (it is written in the form $n l_{m}$, where $l=s,p,d,f$).  
 
 <img src="images/Atomic_orbitals_n123_m-eigenstates.png" alt="Quantum number example" width="400">
 

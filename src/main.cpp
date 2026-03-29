@@ -1,12 +1,26 @@
+#include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
 #include "window.h"
 #include "particle.h"
 #include "orbital.h"
 
+// ======================================================================================
+// Here we define the quantum numbers and parameters for the orbital we want to visualize
+int n = 3;
+int l = 1; 
+int m = 1;
+int numSamples = 60000;
+float a0 = 0.35f;
+// ======================================================================================
+
 int width  = 800;
 int height = 800;
 const char* title = "An atom";
+
+Vec3 proton_color = {1.0f, 0.1f, 0.1f};
+Vec3 cloud_color = {0.2f, 0.5f, 1.0f};
 
 int main() {
     GLFWwindow* window = createWindow(width, height, title);
@@ -14,17 +28,16 @@ int main() {
         return -1;
     }
 
-    Particle proton({0.0f, 0.0f, 0.0f}, {1.0f, 0.1f, 0.1f}, 0.08f);
+    Particle proton({0.0f, 0.0f, 0.0f}, proton_color, 0.08f);
+    OrbitalCloud cloud(cloud_color);
 
-    OrbitalCloud cloud({0.2f, 0.5f, 1.0f});
-    cloud.generate1s(40000, 0.35f);
+    cloud.generateHydrogenState(n, l, m, numSamples, a0);
 
     while (!glfwWindowShouldClose(window)) {
         clearWindow();
 
         glPushMatrix();
 
-        // optional slow rotation so the cloud feels 3D
         static float angle = 0.0f;
         angle += 0.15f;
         glRotatef(angle, 0.0f, 1.0f, 0.0f);
