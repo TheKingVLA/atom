@@ -38,10 +38,6 @@ int main() {
 
         glPushMatrix();
 
-        static float angle = 0.0f;
-        angle += 0.15f;
-        glRotatef(angle, 0.0f, 1.0f, 0.0f);
-
         proton.draw(32);
         cloud.draw(2.0f);
 

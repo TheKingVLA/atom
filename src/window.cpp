@@ -8,6 +8,45 @@
 #define M_PI 3.14159265358979323846
 #endif
 
+Camera camera;
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
+    if (camera.firstMouse) {
+        camera.lastMouseX = xpos;
+        camera.lastMouseY = ypos;
+        camera.firstMouse = false;
+        return;
+    }
+
+    double xoffset = xpos - camera.lastMouseX;
+    double yoffset = camera.lastMouseY - ypos; 
+
+    camera.lastMouseX = xpos;
+    camera.lastMouseY = ypos;
+
+    float sensitivity = 0.3f;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    camera.rotationY += static_cast<float>(xoffset);
+    camera.rotationX += static_cast<float>(yoffset);
+
+    if (camera.rotationX > 89.0f)
+        camera.rotationX = 89.0f;
+    if (camera.rotationX < -89.0f)
+        camera.rotationX = -89.0f;
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
+    float zoomSpeed = 0.2f;
+    camera.zoom -= static_cast<float>(yoffset) * zoomSpeed;
+    
+    if (camera.zoom > -0.5f)
+        camera.zoom = -0.5f;
+    if (camera.zoom < -20.0f)
+        camera.zoom = -20.0f;
+}
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
 
@@ -54,6 +93,8 @@ GLFWwindow* createWindow(int width, int height, const char* title) {
     }
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
     framebuffer_size_callback(window, width, height);
 
     glEnable(GL_DEPTH_TEST);
@@ -94,7 +135,11 @@ void clearWindow() {
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(0.0f, 0.0f, -4.0f);
+    
+    // Apply camera transformations
+    glTranslatef(0.0f, 0.0f, camera.zoom);
+    glRotatef(camera.rotationX, 1.0f, 0.0f, 0.0f);
+    glRotatef(camera.rotationY, 0.0f, 1.0f, 0.0f);
 }
 
 void updateWindow(GLFWwindow* window) {
